@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Precios en Dólares y BsS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .precio-convertido {
+            font-weight: bold;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Calculadora de Precios en Dólares y BsS</h1>
+    <label for="dolar">Ingresa el precio del dólar al día (en BsS):</label>
+    <input type="number" id="dolar" placeholder="Precio del dólar en BsS" step="0.01">
+
+    <h2>Lista de Precios:</h2>
+    <ul id="lista-precios">
+        <li>Magis tv: 1 mes <span class="precio" data-precio="3">3$</span> <span class="precio-convertido"></span></li>
+        <li>Magis tv: 3 meses <span class="precio" data-precio="8">8$</span> <span class="precio-convertido"></span></li>
+        <li>Netflix: 1 mes compartido <span class="precio" data-precio="3.5">3.5$</span> <span class="precio-convertido"></span></li>
+        <li>Netflix: 1 perfil privado <span class="precio" data-precio="7">7$</span> <span class="precio-convertido"></span></li>
+        <li>Netflix: 2 perfiles privado <span class="precio" data-precio="10">10$</span> <span class="precio-convertido"></span></li>
+        <li>Netflix: completo <span class="precio" data-precio="13.5">13.5$</span> <span class="precio-convertido"></span></li>
+        <li>Spotify: 1 mes <span class="precio" data-precio="4.5">4.5$</span> <span class="precio-convertido"></span></li>
+        <li>Spotify: 3 meses <span class="precio" data-precio="13.5">13.5$</span> <span class="precio-convertido"></span></li>
+        <li>HBO: <span class="precio" data-precio="2">2$</span> el mes <span class="precio-convertido"></span></li>
+        <li>Crunchy: <span class="precio" data-precio="2.9">2.9$</span> el mes <span class="precio-convertido"></span></li>
+        <li>Canva: <span class="precio" data-precio="2.5">2.5$</span> el mes <span class="precio-convertido"></span></li>
+        <li>YouTube: <span class="precio" data-precio="5">5$</span> <span class="precio-convertido"></span></li>
+        <li>Amazon: <span class="precio" data-precio="2">2$</span> el mes <span class="precio-convertido"></span></li>
+        <li>Disney: <span class="precio" data-precio="3">3$</span> el mes <span class="precio-convertido"></span></li>
+        <li>Vix: <span class="precio" data-precio="1.5">1.5$</span> el mes <span class="precio-convertido"></span></li>
+        <li>Plex: <span class="precio" data-precio="2.5">2.5$</span> <span class="precio-convertido"></span></li>
+        <li>Paramount: <span class="precio" data-precio="2">2$</span> <span class="precio-convertido"></span></li>
+        <li>Tele Latino: <span class="precio" data-precio="3">3$</span> <span class="precio-convertido"></span></li>
+    </ul>
+</div>
+
+<script>
+    document.getElementById('dolar').addEventListener('input', function() {
+        const dolar = parseFloat(this.value);
+        const precios = document.querySelectorAll('.precio');
+
+        precios.forEach(precio => {
+            const precioOriginal = parseFloat(precio.getAttribute('data-precio'));
+            const precioConvertido = precioOriginal * dolar;
+            // Mostrar el precio en BsS
+            const precioConvertidoElement = precio.nextElementSibling;
+            precioConvertidoElement.textContent = `(${precioConvertido.toFixed(2)} BsS)`;
+        });
+    });
+</script>
+
+</body>
+</html>
