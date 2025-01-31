@@ -1,0 +1,62 @@
+[
+    {
+      "correo": "maria.gomez@tutienda.xyz",
+      "clave": "clave0001",
+      "fecha_inicio": "2022-03-15",
+      "nombres": ["María", "Carlos", "Lucía", "Andrés", "Valentina"]
+    },
+    {
+      "correo": "juan.rodriguez@tutienda.xyz",
+      "clave": "clave0002",
+      "fecha_inicio": "2022-05-10",
+      "nombres": ["Juan", "Fernanda", "Ricardo", "Camila", "Mateo"]
+    },
+    {
+      "correo": "ana.martinez@tutienda.xyz",
+      "clave": "clave0003",
+      "fecha_inicio": "2023-01-22",
+      "nombres": ["Ana", "Diego", "Isabella", "Javier", "Gabriela"]
+    },
+    {
+      "correo": "pedro.lopez@tutienda.xyz",
+      "clave": "clave0004",
+      "fecha_inicio": "2022-11-30",
+      "nombres": ["Pedro", "Sofía", "Miguel", "Daniela", "Alejandro"]
+    },
+    {
+      "correo": "luis.hernandez@tutienda.xyz",
+      "clave": "clave0005",
+      "fecha_inicio": "2023-04-05",
+      "nombres": ["Luis", "Mariana", "Roberto", "Adriana", "Felipe"]
+    },
+    {
+      "correo": "carla.ramirez@tutienda.xyz",
+      "clave": "clave0006",
+      "fecha_inicio": "2022-08-17",
+      "nombres": ["Carla", "Hugo", "Patricia", "Raúl", "Silvia"]
+    },
+    {
+      "correo": "diego.sanchez@tutienda.xyz",
+      "clave": "clave0007",
+      "fecha_inicio": "2023-07-01",
+      "nombres": ["Diego", "Elena", "Oscar", "Laura", "Arturo"]
+    },
+    {
+      "correo": "sofia.diaz@tutienda.xyz",
+      "clave": "clave0008",
+      "fecha_inicio": "2022-09-12",
+      "nombres": ["Sofía", "Gustavo", "Carolina", "Emilio", "Claudia"]
+    },
+    {
+      "correo": "raul.garcia@tutienda.xyz",
+      "clave": "clave0009",
+      "fecha_inicio": "2023-10-20",
+      "nombres": ["Raúl", "Verónica", "Manuel", "Lorena", "Héctor"]
+    },
+    {
+      "correo": "andrea.castro@tutienda.xyz",
+      "clave": "clave0010",
+      "fecha_inicio": "2022-12-25",
+      "nombres": ["Andrea", "Santiago", "Paula", "Alberto", "Beatriz"]
+    }
+  ]

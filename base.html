@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar en Base de Datos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .search-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        #searchInput {
+            padding: 10px;
+            width: 300px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 100px;
+        }
+        .hidden {
+            display: none;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buscar en la Base de Datos</h1>
+    <a href="index.html">← Volver al inicio</a>
+
+    <div class="search-container">
+        <input type="email" id="searchInput" placeholder="Ingresa el correo electrónico">
+        <button onclick="searchUser()">Buscar</button>
+    </div>
+
+    <div id="results" class="hidden">
+        <!-- Aquí se mostrarán los resultados -->
+    </div>
+
+    <script>
+        // Función para buscar el usuario
+        async function searchUser() {
+            const email = document.getElementById('searchInput').value.toLowerCase().trim();
+            const resultsDiv = document.getElementById('results');
+            
+            if (!email) {
+                showError("Por favor ingresa un correo electrónico");
+                return;
+            }
+
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                
+                const user = data.find(u => u.correo.toLowerCase() === email);
+                
+                if (user) {
+                    showResults(user);
+                } else {
+                    showError("No se encontró el usuario");
+                }
+            } catch (error) {
+                showError("Error al cargar los datos");
+            }
+        }
+
+        // Función para mostrar resultados
+        function showResults(user) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.classList.remove('hidden');
+            resultsDiv.innerHTML = `
+                <h3>Resultados para: ${user.correo}</h3>
+                <p><strong>Fecha de inicio:</strong> ${user.fecha_inicio}</p>
+                <p><strong>Nombres asociados:</strong></p>
+                <ul>
+                    ${user.nombres.map(nombre => `<li>${nombre}</li>`).join('')}
+                </ul>
+            `;
+        }
+
+        // Función para mostrar errores
+        function showError(message) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.classList.remove('hidden');
+            resultsDiv.innerHTML = `<p class="error">${message}</p>`;
+        }
+
+        // Buscar al presionar Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchUser();
+            }
+        });
+    </script>
+</body>
+</html>
