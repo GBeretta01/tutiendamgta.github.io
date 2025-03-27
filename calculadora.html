@@ -75,6 +75,17 @@
     </ul>
 </div>
 
+<div class="container">
+    <h3>Netflix tenemos:</h3>
+    <p>1 perfil compartido <span class="precio-dinamico" data-precio="3.5"></span> BsS</p>
+    <p>(1 cuenta compartida netflix cuesta <span class="precio-dinamico" data-precio="3.5"></span> BsS pide código de seguridad cada 15 días... (cambia el correo mensual)</p>
+    <p>Cuentas privadas:</p>
+    <p>Estas cuentas no se comparten con otras familias (sirven solo por 1 hogar, permiten renovación y conservar la misma cuenta)</p>  
+    <p>1 perfil: <span class="precio-dinamico" data-precio="7"></span> BsS</p>
+    <p>2 perfiles: <span class="precio-dinamico" data-precio="11"></span> BsS</p>
+    <p>5 perfiles (la cuenta entera): <span class="precio-dinamico" data-precio="13.5"></span> BsS</p>
+</div>
+
 <script>
     document.getElementById('dolar').addEventListener('input', function() {
         const dolar = parseFloat(this.value);
@@ -86,6 +97,26 @@
             // Mostrar el precio en BsS
             const precioConvertidoElement = precio.nextElementSibling;
             precioConvertidoElement.textContent = `(${precioConvertido.toFixed(2)} BsS)`;
+        });
+    });
+
+    document.getElementById('dolar').addEventListener('input', function() {
+        const dolar = parseFloat(this.value);
+        const precios = document.querySelectorAll('.precio');
+        const preciosDinamicos = document.querySelectorAll('.precio-dinamico');
+
+        // Actualizar lista original
+        precios.forEach(precio => {
+            const precioOriginal = parseFloat(precio.getAttribute('data-precio'));
+            const precioConvertido = precioOriginal * dolar;
+            precio.nextElementSibling.textContent = `(${precioConvertido.toFixed(2)} BsS)`;
+        });
+
+        // Actualizar sección Netflix
+        preciosDinamicos.forEach(elemento => {
+            const precioOriginal = parseFloat(elemento.getAttribute('data-precio'));
+            const precioConvertido = precioOriginal * dolar;
+            elemento.textContent = precioConvertido.toFixed(2);
         });
     });
 </script>
