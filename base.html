@@ -105,12 +105,18 @@
             font-size: 0.9em;
             margin-top: 10px;
         }
+
+        .sin-resultados {
+            color: #666;
+            text-align: center;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Control de Cuentas por Servicio</h1>
-        <h3>Vencimientos al día: <span id="fechaActual">21/05/2025</span></h3>
+        <h3>Vencimientos al día: <span id="fechaActual"></span></h3>
     </div>
 
     <div class="search-container">
@@ -129,25 +135,35 @@
     </div>
 
     <script>
+        // Función para formatear fecha
+        function formatearFecha(fechaISO) {
+            const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(fechaISO).toLocaleDateString('es-ES', opciones);
+        }
+
         // Función para procesar el CSV
         async function cargarDatos() {
             try {
-                const response = await fetch('data.csv'); // Asegúrate de tener el CSV en esta ubicación
+                const response = await fetch('data.csv');
                 const csvData = await response.text();
+                const hoy = new Date().toISOString().split('T')[0];
                 
+                // Actualizar fecha en UI
+                document.getElementById('fechaActual').textContent = formatearFecha(hoy);
+
                 // Procesar CSV
-                const lineas = csvData.split('\n').slice(1);
+                const lineas = csvData.split('\n').slice(1).filter(line => line.trim() !== '');
                 return lineas.map(linea => {
                     const campos = linea.split(';');
                     return {
-                        servicio: campos[0].trim(),
-                        email: campos[1].trim(),
-                        clave: campos[2].trim(),
-                        usuarios: campos[3].split(',').map(u => u.trim()),
-                        fecha_vencimiento: campos[4].trim(),
-                        notas: campos[5].trim(),
-                        puestos_ocupados: parseInt(campos[6]),
-                        puestos_totales: parseInt(campos[7])
+                        servicio: campos[0]?.trim() || 'Sin servicio',
+                        email: campos[1]?.trim() || '',
+                        clave: campos[2]?.trim() || '',
+                        usuarios: campos[3]?.split(',').map(u => u.trim()).filter(u => u) || [],
+                        fecha_vencimiento: campos[4]?.trim() || '',
+                        notas: campos[5]?.trim() || '',
+                        puestos_ocupados: parseInt(campos[6]) || 0,
+                        puestos_totales: parseInt(campos[7]) || 0
                     };
                 });
             } catch (error) {
@@ -159,10 +175,20 @@
         // Mostrar cuentas que vencen hoy
         async function mostrarCuentasHoy() {
             const datos = await cargarDatos();
-            const hoy = new Date().toISOString().split('T')[0]; // Para fecha dinámica
+            const hoy = new Date().toISOString().split('T')[0];
             const contenedor = document.getElementById('cuentasHoy');
-            
-            datos.filter(cuenta => cuenta.fecha_vencimiento === hoy).forEach(cuenta => {
+            contenedor.innerHTML = '';
+
+            const cuentasHoy = datos.filter(cuenta => 
+                cuenta.fecha_vencimiento === hoy
+            );
+
+            if(cuentasHoy.length === 0) {
+                contenedor.innerHTML = '<p class="sin-resultados">No hay cuentas que venzan hoy</p>';
+                return;
+            }
+
+            cuentasHoy.forEach(cuenta => {
                 const card = document.createElement('div');
                 card.className = 'service-card';
                 card.innerHTML = `
@@ -182,28 +208,32 @@
             });
         }
 
-        // Función de búsqueda
+        // Función de búsqueda mejorada
         async function buscarCuentas() {
-            const termino = document.getElementById('searchInput').value.toLowerCase();
+            const termino = document.getElementById('searchInput').value.toLowerCase().trim();
             const datos = await cargarDatos();
-            const resultados = datos.filter(cuenta => 
-                cuenta.email.toLowerCase().includes(termino) ||
-                cuenta.usuarios.some(u => u.toLowerCase().includes(termino)) ||
-                cuenta.servicio.toLowerCase().includes(termino)
-            );
+            const resultados = datos.filter(cuenta => {
+                const busquedaServicio = cuenta.servicio.toLowerCase().includes(termino);
+                const busquedaEmail = cuenta.email.toLowerCase().includes(termino);
+                const busquedaUsuarios = cuenta.usuarios.some(u => u.toLowerCase().includes(termino));
+                const busquedaNotas = cuenta.notas.toLowerCase().includes(termino);
+                
+                return busquedaServicio || busquedaEmail || busquedaUsuarios || busquedaNotas;
+            });
 
             const contenedor = document.getElementById('resultados');
+            const seccionResultados = document.getElementById('resultadosBusqueda');
             contenedor.innerHTML = '';
             
             if(resultados.length > 0) {
-                document.getElementById('resultadosBusqueda').classList.remove('hidden');
+                seccionResultados.classList.remove('hidden');
                 resultados.forEach(cuenta => {
                     const card = document.createElement('div');
                     card.className = 'service-card';
                     card.innerHTML = `
                         <h3 class="service-header">${cuenta.servicio}</h3>
                         ${cuenta.email ? `<p><strong>Email:</strong> ${cuenta.email}</p>` : ''}
-                        <p><strong>Vencimiento:</strong> ${cuenta.fecha_vencimiento}</p>
+                        <p><strong>Vencimiento:</strong> ${formatearFecha(cuenta.fecha_vencimiento)}</p>
                         ${cuenta.usuarios.length > 0 ? `
                             <p><strong>Usuarios:</strong></p>
                             <ul class="usuarios-list">
@@ -216,15 +246,18 @@
                     contenedor.appendChild(card);
                 });
             } else {
-                contenedor.innerHTML = '<p>No se encontraron resultados</p>';
+                seccionResultados.classList.remove('hidden');
+                contenedor.innerHTML = '<p class="sin-resultados">No se encontraron resultados</p>';
             }
         }
 
-        // Inicialización
-        window.onload = mostrarCuentasHoy;
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if(e.key === 'Enter') buscarCuentas();
-        });
+        // Inicialización automática
+        window.onload = () => {
+            mostrarCuentasHoy();
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if(e.key === 'Enter') buscarCuentas();
+            });
+        };
     </script>
 </body>
 </html>
