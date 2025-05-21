@@ -154,7 +154,7 @@
                 // Procesar CSV
                 const lineas = csvData.split('\n').slice(1).filter(line => line.trim() !== '');
                 return lineas.map(linea => {
-                    const campos = linea.split(';');
+                    const campos = linea.split('|');
                     return {
                         servicio: campos[0]?.trim() || 'Sin servicio',
                         email: campos[1]?.trim() || '',
