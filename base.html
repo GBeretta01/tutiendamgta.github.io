@@ -3,124 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar en Base de Datos</title>
+    <title>Dashboard de Vencimientos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f5f5f5;
         }
-        .search-container {
+
+        .header {
             text-align: center;
-            margin: 30px 0;
+            margin-bottom: 30px;
         }
+
+        .search-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
         #searchInput {
-            padding: 10px;
-            width: 300px;
-            margin-right: 10px;
+            width: 70%;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 5px;
+            margin-right: 10px;
         }
-        .volver-inicio {
-            text-decoration: none;
-            color: #007bff;
-            display: block;
-            margin-bottom: 20px;
-        }
+
         button {
-            padding: 10px 20px;
-            background-color: #28a745;
+            padding: 12px 25px;
+            background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background 0.3s;
         }
+
         button:hover {
-            background-color: #218838;
+            background-color: #45a049;
         }
-        #results {
-            margin-top: 20px;
+
+        .dashboard-section {
+            background: white;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            min-height: 100px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
+
+        .service-card {
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #f9f9f9;
+        }
+
+        .service-header {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+
+        .vencimiento-hoy {
+            background-color: #ff4444;
+            color: white;
+        }
+
+        .usuarios-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .usuarios-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
         .hidden {
             display: none;
         }
-        .error {
-            color: #dc3545;
-            font-weight: bold;
+
+        .puestos-info {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .notas {
+            color: #e67e22;
+            font-size: 0.9em;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Buscar en la Base de Datos</h1>
-    <a href="index.html" class="volver-inicio">← Volver al inicio</a>
-
-    <div class="search-container">
-        <input type="email" id="searchInput" placeholder="Ingresa el correo electrónico">
-        <button onclick="searchUser()">Buscar</button>
+    <div class="header">
+        <h1>Control de Cuentas por Servicio</h1>
+        <h3>Vencimientos al día: <span id="fechaActual">21/05/2025</span></h3>
     </div>
 
-    <div id="results" class="hidden">
-        <!-- Aquí se mostrarán los resultados -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar por correo, nombre o servicio...">
+        <button onclick="buscarCuentas()">Buscar</button>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>Cuentas que vencen hoy</h2>
+        <div id="cuentasHoy"></div>
+    </div>
+
+    <div class="dashboard-section hidden" id="resultadosBusqueda">
+        <h2>Resultados de Búsqueda</h2>
+        <div id="resultados"></div>
     </div>
 
     <script>
-        // Función para buscar el usuario
-        async function searchUser() {
-            const email = document.getElementById('searchInput').value.toLowerCase().trim();
-            const resultsDiv = document.getElementById('results');
-            
-            if (!email) {
-                showError("Por favor ingresa un correo electrónico");
-                return;
-            }
-
+        // Función para procesar el CSV
+        async function cargarDatos() {
             try {
-                const response = await fetch('data.json');
-                const data = await response.json();
+                const response = await fetch('datos.csv'); // Asegúrate de tener el CSV en esta ubicación
+                const csvData = await response.text();
                 
-                const user = data.find(u => u.correo.toLowerCase() === email);
-                
-                if (user) {
-                    showResults(user);
-                } else {
-                    showError("No se encontró el usuario");
-                }
+                // Procesar CSV
+                const lineas = csvData.split('\n').slice(1);
+                return lineas.map(linea => {
+                    const campos = linea.split(';');
+                    return {
+                        servicio: campos[0].trim(),
+                        email: campos[1].trim(),
+                        clave: campos[2].trim(),
+                        usuarios: campos[3].split(',').map(u => u.trim()),
+                        fecha_vencimiento: campos[4].trim(),
+                        notas: campos[5].trim(),
+                        puestos_ocupados: parseInt(campos[6]),
+                        puestos_totales: parseInt(campos[7])
+                    };
+                });
             } catch (error) {
-                showError("Error al cargar los datos");
+                console.error('Error cargando datos:', error);
+                return [];
             }
         }
 
-        // Función para mostrar resultados
-        function showResults(user) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.classList.remove('hidden');
-            resultsDiv.innerHTML = `
-                <h3>Resultados para: ${user.correo}</h3>
-                <p><strong>Fecha de inicio:</strong> ${user.fecha_inicio}</p>
-                <p><strong>Nombres asociados:</strong></p>
-                <ul>
-                    ${user.nombres.map(nombre => `<li>${nombre}</li>`).join('')}
-                </ul>
-            `;
+        // Mostrar cuentas que vencen hoy
+        async function mostrarCuentasHoy() {
+            const datos = await cargarDatos();
+            const hoy = new Date().toISOString().split('T')[0]; // Para fecha dinámica
+            const contenedor = document.getElementById('cuentasHoy');
+            
+            datos.filter(cuenta => cuenta.fecha_vencimiento === hoy).forEach(cuenta => {
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                card.innerHTML = `
+                    <h3 class="service-header">${cuenta.servicio}</h3>
+                    <div class="tag vencimiento-hoy">Vence hoy</div>
+                    ${cuenta.email ? `<p><strong>Email:</strong> ${cuenta.email}</p>` : ''}
+                    ${cuenta.usuarios.length > 0 ? `
+                        <p><strong>Usuarios:</strong></p>
+                        <ul class="usuarios-list">
+                            ${cuenta.usuarios.map(u => `<li>${u}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                    <p class="puestos-info">Puestos usados: ${cuenta.puestos_ocupados}/${cuenta.puestos_totales}</p>
+                    ${cuenta.notas ? `<p class="notas">Notas: ${cuenta.notas}</p>` : ''}
+                `;
+                contenedor.appendChild(card);
+            });
         }
 
-        // Función para mostrar errores
-        function showError(message) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.classList.remove('hidden');
-            resultsDiv.innerHTML = `<p class="error">${message}</p>`;
+        // Función de búsqueda
+        async function buscarCuentas() {
+            const termino = document.getElementById('searchInput').value.toLowerCase();
+            const datos = await cargarDatos();
+            const resultados = datos.filter(cuenta => 
+                cuenta.email.toLowerCase().includes(termino) ||
+                cuenta.usuarios.some(u => u.toLowerCase().includes(termino)) ||
+                cuenta.servicio.toLowerCase().includes(termino)
+            );
+
+            const contenedor = document.getElementById('resultados');
+            contenedor.innerHTML = '';
+            
+            if(resultados.length > 0) {
+                document.getElementById('resultadosBusqueda').classList.remove('hidden');
+                resultados.forEach(cuenta => {
+                    const card = document.createElement('div');
+                    card.className = 'service-card';
+                    card.innerHTML = `
+                        <h3 class="service-header">${cuenta.servicio}</h3>
+                        ${cuenta.email ? `<p><strong>Email:</strong> ${cuenta.email}</p>` : ''}
+                        <p><strong>Vencimiento:</strong> ${cuenta.fecha_vencimiento}</p>
+                        ${cuenta.usuarios.length > 0 ? `
+                            <p><strong>Usuarios:</strong></p>
+                            <ul class="usuarios-list">
+                                ${cuenta.usuarios.map(u => `<li>${u}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                        <p class="puestos-info">Puestos: ${cuenta.puestos_ocupados}/${cuenta.puestos_totales}</p>
+                        ${cuenta.notas ? `<p class="notas">Notas: ${cuenta.notas}</p>` : ''}
+                    `;
+                    contenedor.appendChild(card);
+                });
+            } else {
+                contenedor.innerHTML = '<p>No se encontraron resultados</p>';
+            }
         }
 
-        // Buscar al presionar Enter
+        // Inicialización
+        window.onload = mostrarCuentasHoy;
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchUser();
-            }
+            if(e.key === 'Enter') buscarCuentas();
         });
     </script>
 </body>
