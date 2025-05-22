@@ -146,7 +146,7 @@
             try {
                 const response = await fetch('data.csv');
                 const csvData = await response.text();
-                const hoy = new Date().toISOString().split('T')[0];
+                const hoy = 20-05-2025
                 
                 // Actualizar fecha en UI
                 document.getElementById('fechaActual').textContent = formatearFecha(hoy);
