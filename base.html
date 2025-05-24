@@ -3,260 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Vencimientos</title>
+    <title>Dashboard de Vencimientos Mejorado</title>
     <style>
+        :root {
+            --primary: #4CAF50;
+            --danger: #ff4444;
+            --warning: #e67e22;
+            --bg: #f5f5f5;
+            --card-bg: #fff;
+            --shadow: rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+        * { box-sizing: border-box; }
         body {
             font-family: Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: var(--bg);
         }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .search-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        #searchInput {
-            width: 70%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        button {
-            padding: 12px 25px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .dashboard-section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .service-card {
-            border-left: 4px solid #4CAF50;
-            padding: 15px;
-            margin: 15px 0;
-            background-color: #f9f9f9;
-        }
-
-        .service-header {
-            color: #2c3e50;
-            margin-top: 0;
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            margin-right: 10px;
-        }
-
-        .vencimiento-hoy {
-            background-color: #ff4444;
-            color: white;
-        }
-
-        .usuarios-list {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        .usuarios-list li {
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .puestos-info {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .notas {
-            color: #e67e22;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-
-        .sin-resultados {
-            color: #666;
-            text-align: center;
-            padding: 20px;
-        }
+        h1, h2, h3 { margin: .5em 0; }
+        .flex { display: flex; gap: 10px; align-items: center; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .controls, .stats { margin-bottom: 20px; }
+        .controls input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: var(--radius); }
+        .controls button { padding: 8px 12px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius); cursor: pointer; }
+        .controls button:hover { filter: brightness(0.9); }
+        .stats span { margin-right: 15px; font-size: .9em; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 20px; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: var(--radius); box-shadow: 0 2px 5px var(--shadow); position: relative; }
+        .tag { position: absolute; top: 15px; right: 15px; padding: 4px 8px; border-radius: var(--radius); font-size: .8em; color: #fff; }
+        .tag.today { background: var(--danger); }
+        .tag.upcoming { background: var(--warning); }
+        .hidden { display: none; }
+        .card p { margin: .4em 0; }
+        .copy-btn { cursor: pointer; font-size: .8em; color: var(--primary); background: none; border: none; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Control de Cuentas por Servicio</h1>
-        <h3>Vencimientos al día: <span id="fechaActual"></span></h3>
+        <h1>Dashboard de Vencimientos</h1>
+        <h3>Hoy: <span id="hoy"></span></h3>
     </div>
-
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Buscar por correo, nombre o servicio...">
-        <button onclick="buscarCuentas()">Buscar</button>
+    <div class="stats">
+        <span>Total: <b id="stat-total"></b></span>
+        <span>Vencidos hasta hoy: <b id="stat-expired"></b></span>
+        <span>Por vencer (futuros): <b id="stat-upcoming"></b></span>
     </div>
-
-    <div class="dashboard-section">
-        <h2>Cuentas que vencen hoy</h2>
-        <div id="cuentasHoy"></div>
+    <div class="controls flex">
+        <input type="text" id="search" placeholder="Buscar servicio, email...">
+        <button id="btn-export">Exportar CSV</button>
     </div>
-
-    <div class="dashboard-section hidden" id="resultadosBusqueda">
-        <h2>Resultados de Búsqueda</h2>
-        <div id="resultados"></div>
-    </div>
+    <div class="grid" id="cards"></div>
 
     <script>
-        // Función para formatear fecha
-        function formatearFecha(fechaISO) {
-            const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
-            return new Date(fechaISO).toLocaleDateString('es-ES', opciones);
-        }
+        const hoyISO = new Date().toISOString().split('T')[0];
+        document.getElementById('hoy').textContent = hoyISO;
 
-        // Función para procesar el CSV
         async function cargarDatos() {
-            try {
-                const response = await fetch('data.csv');
-                const csvData = await response.text();
-                const hoy = 05-20-2025
-                
-                // Actualizar fecha en UI
-                document.getElementById('fechaActual').textContent = formatearFecha(hoy);
-
-                // Procesar CSV
-                const lineas = csvData.split('\n').slice(1).filter(line => line.trim() !== '');
-                return lineas.map(linea => {
-                    const campos = linea.split('|');
-                    return {
-                        servicio: campos[0]?.trim() || 'Sin servicio',
-                        email: campos[1]?.trim() || '',
-                        clave: campos[2]?.trim() || '',
-                        usuarios: campos[3]?.split(',').map(u => u.trim()).filter(u => u) || [],
-                        fecha_vencimiento: campos[4]?.trim() || '',
-                        notas: campos[5]?.trim() || '',
-                        puestos_ocupados: parseInt(campos[6]) || 0,
-                        puestos_totales: parseInt(campos[7]) || 0
-                    };
-                });
-            } catch (error) {
-                console.error('Error cargando datos:', error);
-                return [];
-            }
+            const response = await fetch('data.csv');
+            const text = await response.text();
+            const lines = text.trim().split('\n').slice(1);
+            return lines.map(line => {
+                const [servicio,email,clave,usuarios,fecha_vencimiento,notas,puestos_ocupados,puestos_totales] = line.split('|');
+                return { servicio, email, clave, usuarios: usuarios.split(',').map(u=>u.trim()), fecha_vencimiento, notas, puestos_ocupados: +puestos_ocupados, puestos_totales: +puestos_totales };
+            });
         }
 
-        // Mostrar cuentas que vencen hoy
-        async function mostrarCuentasHoy() {
-            const datos = await cargarDatos();
-            const hoy = new Date().toISOString().split('T')[0];
-            const contenedor = document.getElementById('cuentasHoy');
-            contenedor.innerHTML = '';
+        const state = { list: [], filtered: [] };
 
-            const cuentasHoy = datos.filter(cuenta => 
-                cuenta.fecha_vencimiento === hoy
-            );
-
-            if(cuentasHoy.length === 0) {
-                contenedor.innerHTML = '<p class="sin-resultados">No hay cuentas que venzan hoy</p>';
+        function render(list) {
+            const container = document.getElementById('cards'); container.innerHTML = '';
+            if (list.length === 0) {
+                container.innerHTML = '<p>No hay cuentas para mostrar.</p>';
                 return;
             }
-
-            cuentasHoy.forEach(cuenta => {
-                const card = document.createElement('div');
-                card.className = 'service-card';
+            list.forEach(item => {
+                const card = document.createElement('div'); card.className = 'card';
+                const d = item.fecha_vencimiento;
+                let tagHTML = '';
+                if (d === hoyISO) tagHTML = '<div class="tag today">Vence hoy</div>';
+                else if (new Date(d) > new Date(hoyISO)) tagHTML = '<div class="tag upcoming">Próx</div>';
                 card.innerHTML = `
-                    <h3 class="service-header">${cuenta.servicio}</h3>
-                    <div class="tag vencimiento-hoy">Vence hoy</div>
-                    ${cuenta.email ? `<p><strong>Email:</strong> ${cuenta.email}</p>` : ''}
-                    ${cuenta.usuarios.length > 0 ? `
-                        <p><strong>Usuarios:</strong></p>
-                        <ul class="usuarios-list">
-                            ${cuenta.usuarios.map(u => `<li>${u}</li>`).join('')}
-                        </ul>
-                    ` : ''}
-                    <p class="puestos-info">Puestos usados: ${cuenta.puestos_ocupados}/${cuenta.puestos_totales}</p>
-                    ${cuenta.notas ? `<p class="notas">Notas: ${cuenta.notas}</p>` : ''}
+                    ${tagHTML}
+                    <h4>${item.servicio}</h4>
+                    <p><strong>Email:</strong> ${item.email}</p>
+                    <p><strong>Vence:</strong> ${d}</p>
+                    <p><strong>Usuarios:</strong> ${item.usuarios.join(', ')}</p>
+                    <p><strong>Puestos:</strong> ${item.puestos_ocupados}/${item.puestos_totales}</p>
+                    ${item.notas ? `<p><em>Notas: ${item.notas}</em></p>` : ''}
+                    <button class="copy-btn" onclick="navigator.clipboard.writeText('${item.clave}')">Copiar clave</button>
                 `;
-                contenedor.appendChild(card);
+                container.appendChild(card);
             });
         }
 
-        // Función de búsqueda mejorada
-        async function buscarCuentas() {
-            const termino = document.getElementById('searchInput').value.toLowerCase().trim();
-            const datos = await cargarDatos();
-            const resultados = datos.filter(cuenta => {
-                const busquedaServicio = cuenta.servicio.toLowerCase().includes(termino);
-                const busquedaEmail = cuenta.email.toLowerCase().includes(termino);
-                const busquedaUsuarios = cuenta.usuarios.some(u => u.toLowerCase().includes(termino));
-                const busquedaNotas = cuenta.notas.toLowerCase().includes(termino);
-                
-                return busquedaServicio || busquedaEmail || busquedaUsuarios || busquedaNotas;
-            });
+        function updateStats() {
+            const total = state.list.length;
+            const expired = state.list.filter(i => i.fecha_vencimiento <= hoyISO).length;
+            const upcoming = total - expired;
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-expired').textContent = expired;
+            document.getElementById('stat-upcoming').textContent = upcoming;
+        }
 
-            const contenedor = document.getElementById('resultados');
-            const seccionResultados = document.getElementById('resultadosBusqueda');
-            contenedor.innerHTML = '';
-            
-            if(resultados.length > 0) {
-                seccionResultados.classList.remove('hidden');
-                resultados.forEach(cuenta => {
-                    const card = document.createElement('div');
-                    card.className = 'service-card';
-                    card.innerHTML = `
-                        <h3 class="service-header">${cuenta.servicio}</h3>
-                        ${cuenta.email ? `<p><strong>Email:</strong> ${cuenta.email}</p>` : ''}
-                        <p><strong>Vencimiento:</strong> ${formatearFecha(cuenta.fecha_vencimiento)}</p>
-                        ${cuenta.usuarios.length > 0 ? `
-                            <p><strong>Usuarios:</strong></p>
-                            <ul class="usuarios-list">
-                                ${cuenta.usuarios.map(u => `<li>${u}</li>`).join('')}
-                            </ul>
-                        ` : ''}
-                        <p class="puestos-info">Puestos: ${cuenta.puestos_ocupados}/${cuenta.puestos_totales}</p>
-                        ${cuenta.notas ? `<p class="notas">Notas: ${cuenta.notas}</p>` : ''}
-                    `;
-                    contenedor.appendChild(card);
-                });
-            } else {
-                seccionResultados.classList.remove('hidden');
-                contenedor.innerHTML = '<p class="sin-resultados">No se encontraron resultados</p>';
+        function applyFilters() {
+            const term = document.getElementById('search').value.toLowerCase().trim();
+            // Mostrar solo vencidos hasta hoy, luego si hay término incluir futuros coincidentes
+            let list = state.list.filter(i => i.fecha_vencimiento <= hoyISO && (
+                i.servicio.toLowerCase().includes(term) ||
+                i.email.toLowerCase().includes(term) ||
+                i.usuarios.some(u => u.includes(term))
+            ));
+            if (term) {
+                const upcomingMatches = state.list.filter(i => i.fecha_vencimiento > hoyISO && (
+                    i.servicio.toLowerCase().includes(term) ||
+                    i.email.toLowerCase().includes(term) ||
+                    i.usuarios.some(u => u.includes(term))
+                ));
+                list = list.concat(upcomingMatches);
             }
+            state.filtered = list;
+            render(list);
+            updateStats();
         }
 
-        // Inicialización automática
-        window.onload = () => {
-            mostrarCuentasHoy();
-            document.getElementById('searchInput').addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') buscarCuentas();
-            });
+        function exportCSV() {
+            const arr = state.filtered.length ? state.filtered : state.list;
+            const header = 'servicio|email|clave|usuarios|fecha_vencimiento|notas|puestos_ocupados|puestos_totales';
+            const lines = arr.map(i => [i.servicio,i.email,i.clave,i.usuarios.join(','),i.fecha_vencimiento,i.notas,i.puestos_ocupados,i.puestos_totales].join('|'));
+            const blob = new Blob([header+'\n'+lines.join('\n')],{type:'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href=url; a.download='export.csv'; a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('search').addEventListener('input', () => { clearTimeout(window._deb); window._deb = setTimeout(applyFilters, 300); });
+        document.getElementById('btn-export').addEventListener('click', exportCSV);
+
+        window.onload = async () => {
+            state.list = await cargarDatos();
+            applyFilters();
         };
     </script>
 </body>
