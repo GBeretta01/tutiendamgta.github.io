@@ -3,16 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Precios Protegida</title>
-    <title>Calculadora de Precios Protegida</title>
+    <title>Calculadora de Precios</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         * {
             box-sizing: border-box;
             margin: 0;
@@ -38,64 +30,8 @@
             overflow: hidden;
         }
         
-        .password-screen {
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .password-screen h2 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .password-screen p {
-            color: #666;
-            margin-bottom: 25px;
-        }
-        
-        .password-form {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .password-input {
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            margin-bottom: 15px;
-            transition: border-color 0.3s;
-        }
-        
-        .password-input:focus {
-            border-color: #4d90fe;
-            outline: none;
-        }
-        
-        .submit-btn {
-            background: linear-gradient(to right, #4776E6, #8E54E9);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-        
-        .submit-btn:hover {
-            opacity: 0.9;
-        }
-        
-        .error-message {
-            color: #d93025;
-            margin-top: 15px;
-            display: none;
-        }
-        
         .calculator-screen {
             padding: 30px;
-            display: none;
         }
         
         .header {
@@ -110,17 +46,14 @@
             font-size: 24px;
         }
         
-        .logout-btn {
-            background: #f1f1f1;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            color: #666;
+        .volver-inicio {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
         }
         
-        .logout-btn:hover {
-            background: #e5e5e5;
+        .volver-inicio:hover {
+            text-decoration: underline;
         }
         
         .dolar-input {
@@ -185,39 +118,14 @@
             color: #007BFF;
             font-weight: bold;
         }
-
-        .volver-inicio {
-            text-decoration: none;
-            color: #007bff;
-            display: block;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        
-        .volver-inicio:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Pantalla de contraseña -->
-        <div class="password-screen" id="passwordScreen">
-            <h2>🔒 Calculadora Protegida</h2>
-            <p>Ingrese la contraseña para acceder a la calculadora</p>
-            <div class="password-form">
-                <input type="password" class="password-input" id="passwordInput" placeholder="Ingrese la contraseña">
-                <button class="submit-btn" id="submitPassword">Acceder</button>
-                <div class="error-message" id="errorMessage">Contraseña incorrecta. Intente nuevamente.</div>
-            </div>
-            <a href="index.html" class="volver-inicio"><br>← Volver al inicio</a>
-        </div>
-        
-        <!-- Pantalla de la calculadora -->
-        <div class="calculator-screen" id="calculatorScreen">
+        <!-- Pantalla de la calculadora (siempre visible) -->
+        <div class="calculator-screen">
             <div class="header">
                 <h1>Calculadora de Precios</h1>
-                <button class="logout-btn" id="logoutBtn">Cerrar</button>
                 <a href="index.html" class="volver-inicio">← Volver al inicio</a>
             </div>
             
@@ -260,67 +168,19 @@
                 <p>Cuentas privadas (no se comparten con otras familias, sirven solo por 1 hogar, permiten renovación y conservar la misma cuenta):</p>  
                 <p>1 perfil: <span id="netflix2" class="promo-price"></span></p>
                 <p>5 perfiles (la cuenta entera): <span id="netflix3" class="promo-price"></span></p>
-                <p>Estas cuentas no se comparten con otras familias (sirven solo por 1 hogar, permiten renovación y conservar la misma cuenta siempre y cuando esta esté activa )</p>
+                <p>Estas cuentas no se comparten con otras familias (sirven solo por 1 hogar, permiten renovación y conservar la misma cuenta siempre y cuando esta esté activa)</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Ofuscación de la contraseña (no está en texto plano)
-        function getPassword() {
-            // La contraseña es 1234 pero ofuscada
-            const part1 = Math.floor(2456 / 2) - 1; // 1228 - 1 = 1227
-            const part2 = Math.pow(2, 4) + 3; // 16 + 3 = 19
-            const part3 = Math.sqrt(169); // 13
-            const part4 = Math.round(3.6); // 4
-            
-            // Reensamblamos la contraseña
-            return "" + (part1 - 1223) + (part2 - 15) + (part3 - 9) + part4;
-        }
-        
-        // Elementos DOM
-        const passwordScreen = document.getElementById('passwordScreen');
-        const calculatorScreen = document.getElementById('calculatorScreen');
-        const passwordInput = document.getElementById('passwordInput');
-        const submitPassword = document.getElementById('submitPassword');
-        const errorMessage = document.getElementById('errorMessage');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const dolarInput = document.getElementById('dolarInput');
-        
         // Precios en USD
         const prices = [3, 8, 3.5, 6, 13.5, 4.5, 13.5, 2, 2.7, 2.5, 4, 2, 3, 1.5, 2.9, 2, 3, 4, 4];
         const netflixPrices = [3.5, 6, 13.5];
         const promosprice = [4, 5, 5, 6];
         
-        // Verificar contraseña
-        submitPassword.addEventListener('click', function() {
-            if (passwordInput.value === getPassword()) {
-                passwordScreen.style.display = 'none';
-                calculatorScreen.style.display = 'block';
-            } else {
-                errorMessage.style.display = 'block';
-                passwordInput.value = '';
-                setTimeout(() => {
-                    errorMessage.style.display = 'none';
-                }, 3000);
-            }
-        });
-        
-        // Permitir enviar con Enter
-        passwordInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                submitPassword.click();
-            }
-        });
-        
-        // Cerrar sesión
-        logoutBtn.addEventListener('click', function() {
-            calculatorScreen.style.display = 'none';
-            passwordScreen.style.display = 'block';
-            passwordInput.value = '';
-            dolarInput.value = '';
-            clearPrices();
-        });
+        // Elementos DOM
+        const dolarInput = document.getElementById('dolarInput');
         
         // Calcular precios cuando cambia el valor del dólar
         dolarInput.addEventListener('input', function() {
@@ -348,19 +208,6 @@
             for (let i = 0; i < promosprice.length; i++) {
                 const promoInBss = (promosprice[i] * dolar).toFixed(2);
                 document.getElementById(`promo${i}`).textContent = `${promoInBss} BsS`;
-            }
-        }
-        
-        // Función para limpiar precios
-        function clearPrices() {
-            for (let i = 0; i < prices.length; i++) {
-                document.getElementById(`price${i}`).textContent = '';
-            }
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById(`netflix${i}`).textContent = '';
-            }
-            for (let i = 0; i < promosprice.length; i++) {
-                document.getElementById(`promo${i}`).textContent = '';
             }
         }
     </script>
