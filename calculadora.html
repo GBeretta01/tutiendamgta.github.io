@@ -3,271 +3,338 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora precios</title>
+    <title>Calculadora de Precios Protegida</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
             background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
-        .volver-inicio {
-            text-decoration: none;
-            color: #007bff;
-            display: block;
-            margin-bottom: 20px;
-        }
-        .volver-inicio:hover {
-            text-decoration: underline;
-        }
+        
         .container {
-            max-width: 600px;
-            width: 90%;
-            margin: 20px auto;
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-        input[type="number"] {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            max-width: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .password-screen {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .password-screen h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .password-screen p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .password-form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .password-input {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 16px;
-            box-sizing: border-box;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+        
+        .password-input:focus {
+            border-color: #4d90fe;
+            outline: none;
         }
-        li {
-            padding: 12px;
+        
+        .submit-btn {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .error-message {
+            color: #d93025;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .calculator-screen {
+            padding: 30px;
+            display: none;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .logout-btn {
+            background: #f1f1f1;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .logout-btn:hover {
+            background: #e5e5e5;
+        }
+        
+        .dolar-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+        
+        .dolar-input:focus {
+            border-color: #4d90fe;
+            outline: none;
+        }
+        
+        .price-list {
+            list-style: none;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .price-item {
+            padding: 15px;
             border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
         }
-        .precio-convertido {
-            font-weight: bold;
-            color: #007BFF;
+        
+        .price-item:last-child {
+            border-bottom: none;
         }
         
-        /* Estilos para la protección con contraseña */
-        #password-protection {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #3a6186 0%, #89253e 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        #password-form {
-            background-color: white;
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-        #password-form h2 {
-            margin-top: 0;
+        .service-name {
             color: #333;
-            margin-bottom: 10px;
         }
-        #password-form p {
+        
+        .price-usd {
             color: #666;
-            margin-bottom: 25px;
         }
-        #password-input {
-            width: 100%;
-            padding: 14px;
-            margin: 15px 0;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        #password-input:focus {
-            border-color: #4d90fe;
-            outline: none;
-        }
-        #password-submit {
-            background: linear-gradient(to right, #4776E6, #8E54E9);
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            transition: opacity 0.3s;
-        }
-        #password-submit:hover {
-            opacity: 0.9;
-        }
-        #password-error {
-            color: #d93025;
-            margin-top: 15px;
-            display: none;
+        
+        .price-bss {
+            color: #007BFF;
             font-weight: bold;
         }
-        .hidden {
-            display: none;
+        
+        .netflix-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #eee;
         }
-        .password-hint {
-            color: #777;
-            font-size: 12px;
+        
+        .netflix-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .netflix-section p {
+            margin-bottom: 10px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .hint {
             margin-top: 20px;
-            background-color: #f9f9f9;
             padding: 10px;
-            border-radius: 4px;
-            border-left: 4px solid #4d90fe;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-
-<!-- Protección con contraseña -->
-<div id="password-protection">
-    <div id="password-form">
-        <h2>🔒 Acceso Restringido</h2>
-        <p>Ingrese la contraseña para acceder a la calculadora</p>
-        <input type="password" id="password-input" placeholder="Ingrese la contraseña">
-        <button id="password-submit">Verificar y Acceder</button>
-        <p id="password-error">Contraseña incorrecta. Intente nuevamente.</p>
-        <div class="password-hint">
-            <strong>Hint:</strong> La contraseña es un número de 4 dígitos comúnmente usado para pruebas.
+    <div class="container">
+        <!-- Pantalla de contraseña -->
+        <div class="password-screen" id="passwordScreen">
+            <h2>🔒 Calculadora Protegida</h2>
+            <p>Ingrese la contraseña para acceder a la calculadora</p>
+            <div class="password-form">
+                <input type="password" class="password-input" id="passwordInput" placeholder="Ingrese la contraseña">
+                <button class="submit-btn" id="submitPassword">Acceder</button>
+                <div class="error-message" id="errorMessage">Contraseña incorrecta. Intente nuevamente.</div>
+            </div>
+            <div class="hint">
+                Pista: La contraseña es un número de 4 dígitos comúnmente usado para pruebas.
+            </div>
+        </div>
+        
+        <!-- Pantalla de la calculadora -->
+        <div class="calculator-screen" id="calculatorScreen">
+            <div class="header">
+                <h1>Calculadora de Precios</h1>
+                <button class="logout-btn" id="logoutBtn">Cerrar</button>
+            </div>
+            
+            <input type="number" id="dolarInput" class="dolar-input" placeholder="Precio del dólar en BsS" step="0.01">
+            
+            <h2>Lista de Precios:</h2>
+            <ul class="price-list" id="priceList">
+                <li class="price-item"><span class="service-name">Magis tv: 1 mes</span> <span class="price-usd">3 USD</span> <span class="price-bss" id="price0"></span></li>
+                <li class="price-item"><span class="service-name">Magis tv: 3 meses</span> <span class="price-usd">8 USD</span> <span class="price-bss" id="price1"></span></li>
+                <li class="price-item"><span class="service-name">Netflix: 1 mes compartido</span> <span class="price-usd">3.5 USD</span> <span class="price-bss" id="price2"></span></li>
+                <li class="price-item"><span class="service-name">Netflix: 1 perfil privado</span> <span class="price-usd">7 USD</span> <span class="price-bss" id="price3"></span></li>
+                <li class="price-item"><span class="service-name">Netflix: 2 perfiles privado</span> <span class="price-usd">11 USD</span> <span class="price-bss" id="price4"></span></li>
+                <li class="price-item"><span class="service-name">Netflix: completo</span> <span class="price-usd">13.5 USD</span> <span class="price-bss" id="price5"></span></li>
+                <li class="price-item"><span class="service-name">Spotify: 1 mes</span> <span class="price-usd">4.5 USD</span> <span class="price-bss" id="price6"></span></li>
+                <li class="price-item"><span class="service-name">Spotify: 3 meses</span> <span class="price-usd">13.5 USD</span> <span class="price-bss" id="price7"></span></li>
+                <li class="price-item"><span class="service-name">HBO: el mes</span> <span class="price-usd">2 USD</span> <span class="price-bss" id="price8"></span></li>
+                <li class="price-item"><span class="service-name">Crunchy: el mes</span> <span class="price-usd">2.9 USD</span> <span class="price-bss" id="price9"></span></li>
+                <li class="price-item"><span class="service-name">Canva: el mes</span> <span class="price-usd">2.5 USD</span> <span class="price-bss" id="price10"></span></li>
+                <li class="price-item"><span class="service-name">YouTube</span> <span class="price-usd">5 USD</span> <span class="price-bss" id="price11"></span></li>
+                <li class="price-item"><span class="service-name">Amazon: el mes</span> <span class="price-usd">2 USD</span> <span class="price-bss" id="price12"></span></li>
+                <li class="price-item"><span class="service-name">Disney: el mes</span> <span class="price-usd">3 USD</span> <span class="price-bss" id="price13"></span></li>
+                <li class="price-item"><span class="service-name">Vix: el mes</span> <span class="price-usd">1.5 USD</span> <span class="price-bss" id="price14"></span></li>
+                <li class="price-item"><span class="service-name">Plex</span> <span class="price-usd">2.5 USD</span> <span class="price-bss" id="price15"></span></li>
+                <li class="price-item"><span class="service-name">Paramount</span> <span class="price-usd">2 USD</span> <span class="price-bss" id="price16"></span></li>
+                <li class="price-item"><span class="service-name">Tele Latino</span> <span class="price-usd">3 USD</span> <span class="price-bss" id="price17"></span></li>
+            </ul>
+            
+            <div class="netflix-section">
+                <h3>Netflix tenemos:</h3>
+                <p>1 perfil compartido <span id="netflix1"></span> BsS</p>
+                <p>1 cuenta compartida Netflix cuesta <span id="netflix2"></span> BsS (pide código de seguridad cada 15 días, cambia el correo mensual)</p>
+                <p>Cuentas privadas (no se comparten con otras familias, sirven solo por 1 hogar, permiten renovación y conservar la misma cuenta):</p>  
+                <p>1 perfil: <span id="netflix3"></span> BsS</p>
+                <p>2 perfiles: <span id="netflix4"></span> BsS</p>
+                <p>5 perfiles (la cuenta entera): <span id="netflix5"></span> BsS</p>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container hidden" id="main-content">
-    <h1>Calculadora de Precios en Dólares y BsS</h1>
-    <a href="index.html" class="volver-inicio">← Volver al inicio</a>
-
-    <label for="dolar">Ingresa el precio del dólar al día (en BsS):</label>
-    <input type="number" id="dolar" placeholder="Precio del dólar en BsS" step="0.01">
-
-    <h2>Lista de Precios:</h2>
-    <ul id="lista-precios">
-        <li><span class="precio" data-precio="3"></span> Magis tv: 1 mes  <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="8"></span> Magis tv: 3 meses  <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="3.5"></span> Netflix: 1 mes compartido  <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="7"></span> Netflix: 1 perfil privado  <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="11"></span> Netflix: 2 perfiles privado  <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="13.5"></span> Netflix: completo  <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="4.5"></span> Spotify: 1 mes  <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="13.5"></span> Spotify: 3 meses  <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="2"></span> HBO: el mes <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="2.9"></span> Crunchy: el mes <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="2.5"></span> Canva: el mes <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="5"></span> YouTube: <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="2"></span> Amazon: el mes <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="3"></span> Disney: el mes <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="1.5"></span> Vix: el mes <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="2.5"></span> Plex: <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="2"></span> Paramount: <span class="precio-convertido"></span></li>
-        <li><span class="precio" data-precio="3"></span> Tele Latino: <span class="precio-convertido"></span></li>
-    </ul>
-
-    <h3>Netflix tenemos:</h3>
-    <p>1 perfil compartido <span class="precio-dinamico" data-precio="3.5"></span> BsS</p>
-    <p>(1 cuenta compartida netflix cuesta <span class="precio-dinamico" data-precio="3.5"></span> BsS pide código de seguridad cada 15 días... (cambia el correo mensual)</p>
-    <p>Cuentas privadas:</p>
-    <p>Estas cuentas no se comparten con otras familias (sirven solo por 1 hogar, permiten renovación y conservar la misma cuenta)</p>  
-    <p>1 perfil: <span class="precio-dinamico" data-precio="7"></span> BsS</p>
-    <p>2 perfiles: <span class="precio-dinamico" data-precio="11"></span> BsS</p>
-    <p>5 perfiles (la cuenta entera): <span class="precio-dinamico" data-precio="13.5"></span> BsS</p>
-</div>
-
-<script>
-    // Función para ofuscar la contraseña y no ponerla en texto plano
-    function getPassword() {
-        // Esta función genera la contraseña mediante operaciones matemáticas
-        // La contraseña real es 1234, pero se genera de forma ofuscada
-        const part1 = Math.floor(2456 / 2) - 1; // 1228 - 1 = 1227
-        const part2 = Math.pow(2, 4) + 3; // 16 + 3 = 19
-        const part3 = Math.sqrt(169); // 13
-        const part4 = Math.round(3.6); // 4
+    <script>
+        // Ofuscación de la contraseña (no está en texto plano)
+        function getPassword() {
+            // La contraseña es 1234 pero ofuscada
+            const part1 = Math.floor(2456 / 2) - 1; // 1228 - 1 = 1227
+            const part2 = Math.pow(2, 4) + 3; // 16 + 3 = 19
+            const part3 = Math.sqrt(169); // 13
+            const part4 = Math.round(3.6); // 4
+            
+            // Reensamblamos la contraseña
+            return "" + (part1 - 1223) + (part2 - 15) + (part3 - 9) + part4;
+        }
         
-        // Reensamblamos la contraseña
-        return "" + (part1 - 1223) + (part2 - 15) + (part3 - 9) + part4;
-    }
-    
-    document.getElementById('password-submit').addEventListener('click', function() {
-        const inputPassword = document.getElementById('password-input').value;
-        if (inputPassword === getPassword()) {
-            document.getElementById('password-protection').style.display = 'none';
-            document.getElementById('main-content').classList.remove('hidden');
-            
-            // Almacenar en sessionStorage para no pedir la contraseña nuevamente en esta sesión
-            sessionStorage.setItem('calculadora-auth', 'true');
-        } else {
-            document.getElementById('password-error').style.display = 'block';
-            document.getElementById('password-input').value = '';
-            document.getElementById('password-input').focus();
-            
-            // Agregar efecto de vibración al error
-            document.getElementById('password-form').animate([
-                { transform: 'translateX(0)' },
-                { transform: 'translateX(-10px)' },
-                { transform: 'translateX(10px)' },
-                { transform: 'translateX(0)' }
-            ], {
-                duration: 300,
-                iterations: 1
-            });
-        }
-    });
-    
-    // Permitir enviar con Enter
-    document.getElementById('password-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            document.getElementById('password-submit').click();
-        }
-    });
-    
-    // Comprobar si ya se autenticó en esta sesión
-    if (sessionStorage.getItem('calculadora-auth') === 'true') {
-        document.getElementById('password-protection').style.display = 'none';
-        document.getElementById('main-content').classList.remove('hidden');
-    } else {
-        // Enfocar el campo de contraseña al cargar
-        document.getElementById('password-input').focus();
-    }
-
-    // Funcionalidad original de la calculadora
-    document.getElementById('dolar').addEventListener('input', function() {
-        const dolar = parseFloat(this.value);
-        const precios = document.querySelectorAll('.precio');
-        const preciosDinamicos = document.querySelectorAll('.precio-dinamico');
-
-        // Actualizar lista original
-        precios.forEach(precio => {
-            const precioOriginal = parseFloat(precio.getAttribute('data-precio'));
-            const precioConvertido = precioOriginal * dolar;
-            precio.nextElementSibling.textContent = `(${precioConvertido.toFixed(2)} BsS)`;
+        // Elementos DOM
+        const passwordScreen = document.getElementById('passwordScreen');
+        const calculatorScreen = document.getElementById('calculatorScreen');
+        const passwordInput = document.getElementById('passwordInput');
+        const submitPassword = document.getElementById('submitPassword');
+        const errorMessage = document.getElementById('errorMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const dolarInput = document.getElementById('dolarInput');
+        
+        // Precios en USD
+        const prices = [3, 8, 3.5, 7, 11, 13.5, 4.5, 13.5, 2, 2.9, 2.5, 5, 2, 3, 1.5, 2.5, 2, 3];
+        const netflixPrices = [3.5, 3.5, 7, 11, 13.5];
+        
+        // Verificar contraseña
+        submitPassword.addEventListener('click', function() {
+            if (passwordInput.value === getPassword()) {
+                passwordScreen.style.display = 'none';
+                calculatorScreen.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
         });
-
-        // Actualizar sección Netflix
-        preciosDinamicos.forEach(elemento => {
-            const precioOriginal = parseFloat(elemento.getAttribute('data-precio'));
-            const precioConvertido = precioOriginal * dolar;
-            elemento.textContent = precioConvertido.toFixed(2);
+        
+        // Permitir enviar con Enter
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitPassword.click();
+            }
         });
-    });
-</script>
-
+        
+        // Cerrar sesión
+        logoutBtn.addEventListener('click', function() {
+            calculatorScreen.style.display = 'none';
+            passwordScreen.style.display = 'block';
+            passwordInput.value = '';
+            dolarInput.value = '';
+            clearPrices();
+        });
+        
+        // Calcular precios cuando cambia el valor del dólar
+        dolarInput.addEventListener('input', function() {
+            const dolar = parseFloat(this.value);
+            if (!isNaN(dolar)) {
+                calculatePrices(dolar);
+            }
+        });
+        
+        // Función para calcular precios
+        function calculatePrices(dolar) {
+            // Calcular precios principales
+            for (let i = 0; i < prices.length; i++) {
+                const priceInBss = (prices[i] * dolar).toFixed(2);
+                document.getElementById(`price${i}`).textContent = `${priceInBss} BsS`;
+            }
+            
+            // Calcular precios de Netflix
+            for (let i = 0; i < netflixPrices.length; i++) {
+                const priceInBss = (netflixPrices[i] * dolar).toFixed(2);
+                document.getElementById(`netflix${i+1}`).textContent = priceInBss;
+            }
+        }
+        
+        // Función para limpiar precios
+        function clearPrices() {
+            for (let i = 0; i < prices.length; i++) {
+                document.getElementById(`price${i}`).textContent = '';
+            }
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`netflix${i}`).textContent = '';
+            }
+        }
+    </script>
 </body>
 </html>
