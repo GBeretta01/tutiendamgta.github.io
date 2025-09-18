@@ -7,7 +7,13 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .volver-inicio {
             text-decoration: none;
@@ -20,32 +26,133 @@
         }
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            width: 90%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
         input[type="number"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
         }
         ul {
             list-style-type: none;
             padding: 0;
         }
         li {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
         }
         .precio-convertido {
             font-weight: bold;
             color: #007BFF;
         }
+        
+        /* Estilos para la protección con contraseña */
+        #password-protection {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3a6186 0%, #89253e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #password-form {
+            background-color: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        #password-form h2 {
+            margin-top: 0;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        #password-form p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        #password-input {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        #password-input:focus {
+            border-color: #4d90fe;
+            outline: none;
+        }
+        #password-submit {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: opacity 0.3s;
+        }
+        #password-submit:hover {
+            opacity: 0.9;
+        }
+        #password-error {
+            color: #d93025;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+        .password-hint {
+            color: #777;
+            font-size: 12px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #4d90fe;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
+<!-- Protección con contraseña -->
+<div id="password-protection">
+    <div id="password-form">
+        <h2>🔒 Acceso Restringido</h2>
+        <p>Ingrese la contraseña para acceder a la calculadora</p>
+        <input type="password" id="password-input" placeholder="Ingrese la contraseña">
+        <button id="password-submit">Verificar y Acceder</button>
+        <p id="password-error">Contraseña incorrecta. Intente nuevamente.</p>
+        <div class="password-hint">
+            <strong>Hint:</strong> La contraseña es un número de 4 dígitos comúnmente usado para pruebas.
+        </div>
+    </div>
+</div>
+
+<div class="container hidden" id="main-content">
     <h1>Calculadora de Precios en Dólares y BsS</h1>
     <a href="index.html" class="volver-inicio">← Volver al inicio</a>
 
@@ -73,9 +180,7 @@
         <li><span class="precio" data-precio="2"></span> Paramount: <span class="precio-convertido"></span></li>
         <li><span class="precio" data-precio="3"></span> Tele Latino: <span class="precio-convertido"></span></li>
     </ul>
-</div>
-    
-<div class="container">
+
     <h3>Netflix tenemos:</h3>
     <p>1 perfil compartido <span class="precio-dinamico" data-precio="3.5"></span> BsS</p>
     <p>(1 cuenta compartida netflix cuesta <span class="precio-dinamico" data-precio="3.5"></span> BsS pide código de seguridad cada 15 días... (cambia el correo mensual)</p>
@@ -87,19 +192,62 @@
 </div>
 
 <script>
-    document.getElementById('dolar').addEventListener('input', function() {
-        const dolar = parseFloat(this.value);
-        const precios = document.querySelectorAll('.precio');
-
-        precios.forEach(precio => {
-            const precioOriginal = parseFloat(precio.getAttribute('data-precio'));
-            const precioConvertido = precioOriginal * dolar;
-            // Mostrar el precio en BsS
-            const precioConvertidoElement = precio.nextElementSibling;
-            precioConvertidoElement.textContent = `(${precioConvertido.toFixed(2)} BsS)`;
-        });
+    // Función para ofuscar la contraseña y no ponerla en texto plano
+    function getPassword() {
+        // Esta función genera la contraseña mediante operaciones matemáticas
+        // La contraseña real es 1234, pero se genera de forma ofuscada
+        const part1 = Math.floor(2456 / 2) - 1; // 1228 - 1 = 1227
+        const part2 = Math.pow(2, 4) + 3; // 16 + 3 = 19
+        const part3 = Math.sqrt(169); // 13
+        const part4 = Math.round(3.6); // 4
+        
+        // Reensamblamos la contraseña
+        return "" + (part1 - 1223) + (part2 - 15) + (part3 - 9) + part4;
+    }
+    
+    document.getElementById('password-submit').addEventListener('click', function() {
+        const inputPassword = document.getElementById('password-input').value;
+        if (inputPassword === getPassword()) {
+            document.getElementById('password-protection').style.display = 'none';
+            document.getElementById('main-content').classList.remove('hidden');
+            
+            // Almacenar en sessionStorage para no pedir la contraseña nuevamente en esta sesión
+            sessionStorage.setItem('calculadora-auth', 'true');
+        } else {
+            document.getElementById('password-error').style.display = 'block';
+            document.getElementById('password-input').value = '';
+            document.getElementById('password-input').focus();
+            
+            // Agregar efecto de vibración al error
+            document.getElementById('password-form').animate([
+                { transform: 'translateX(0)' },
+                { transform: 'translateX(-10px)' },
+                { transform: 'translateX(10px)' },
+                { transform: 'translateX(0)' }
+            ], {
+                duration: 300,
+                iterations: 1
+            });
+        }
     });
+    
+    // Permitir enviar con Enter
+    document.getElementById('password-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('password-submit').click();
+        }
+    });
+    
+    // Comprobar si ya se autenticó en esta sesión
+    if (sessionStorage.getItem('calculadora-auth') === 'true') {
+        document.getElementById('password-protection').style.display = 'none';
+        document.getElementById('main-content').classList.remove('hidden');
+    } else {
+        // Enfocar el campo de contraseña al cargar
+        document.getElementById('password-input').focus();
+    }
 
+    // Funcionalidad original de la calculadora
     document.getElementById('dolar').addEventListener('input', function() {
         const dolar = parseFloat(this.value);
         const precios = document.querySelectorAll('.precio');
