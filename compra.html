@@ -5,274 +5,354 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora precios</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .main-container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            padding: 30px;
+        }
+        
         .volver-inicio {
             text-decoration: none;
             color: #007bff;
             display: block;
             margin-bottom: 20px;
+            font-weight: bold;
         }
+        
         .volver-inicio:hover {
             text-decoration: underline;
         }
+        
         .container {
-            max-width: 800px;
-            margin: 0 auto;
             display: flex;
             gap: 40px;
         }
+        
         .lista-container {
             flex: 1;
         }
+        
         .resumen {
             flex: 1;
-            background: #f5f5f5;
-            padding: 20px;
+            background: #f8f9fa;
+            padding: 25px;
             border-radius: 10px;
             height: fit-content;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
+        
         input[type="number"] {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
         }
+        
         #dolar {
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
+        
+        #dolar:focus {
+            border-color: #4d90fe;
+            outline: none;
+        }
+        
+        h1, h2, h3 {
+            color: #333;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
+        }
+        
         ul {
             list-style-type: none;
             padding: 0;
         }
+        
         li {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
             display: flex;
             align-items: center;
             gap: 10px;
+            transition: background-color 0.3s;
         }
+        
+        li:hover {
+            background-color: #f8f9fa;
+        }
+        
         .precio-convertido {
             font-weight: bold;
             color: #007BFF;
             margin-left: auto;
         }
+        
         .contador {
             width: 60px;
-            padding: 5px;
+            padding: 8px;
             display: none;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
+        
         .resumen h3 {
             margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
         }
+        
         .total {
             font-size: 1.2em;
-            margin: 10px 0;
-            padding: 10px;
+            margin: 15px 0;
+            padding: 15px;
             background: white;
-            border-radius: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .check-app {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="main-container">
+        <div class="container">
+            <div class="lista-container">
+                <h1>Calculadora de Precios en Dólares y BsS</h1>
+                <a href="index.html" class="volver-inicio">← Volver al inicio</a>
 
-<div class="container">
-    <div class="lista-container">
-        <h1>Calculadora de Precios en Dólares y BsS</h1>
-        <a href="index.html" class="volver-inicio">← Volver al inicio</a>
+                <label for="dolar">Ingresa el precio del dólar al día (en BsS):</label>
+                <input type="number" id="dolar" placeholder="Precio del dólar en BsS" step="0.01">
 
-        <label for="dolar">Ingresa el precio del dólar al día (en BsS):</label>
-        <input type="number" id="dolar" placeholder="Precio del dólar en BsS" step="0.01">
+                <h2>Lista de Precios:</h2>
+                <ul id="lista-precios">
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Magis tv: 1 mes</span>
+                        <span class="precio" data-precio="3">3$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Magis tv: 3 meses</span>
+                        <span class="precio" data-precio="8">8$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Netflix: 1 mes compartido</span>
+                        <span class="precio" data-precio="3.5">3.5$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Netflix: 1 perfil privado</span>
+                        <span class="precio" data-precio="6">6$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Netflix: completo</span>
+                        <span class="precio" data-precio="13.5">13.5$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Spotify: 1 mes</span>
+                        <span class="precio" data-precio="4.5">4.5$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Spotify: 3 meses</span>
+                        <span class="precio" data-precio="13.5">13.5$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>HBO: el mes</span>
+                        <span class="precio" data-precio="2">2$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Crunchy: el mes</span>
+                        <span class="precio" data-precio="2.7">2.7$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Canva: el mes</span>
+                        <span class="precio" data-precio="2.5">2.5$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>YouTube:</span>
+                        <span class="precio" data-precio="4">4$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Amazon: el mes</span>
+                        <span class="precio" data-precio="2">2$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Disney: el mes</span>
+                        <span class="precio" data-precio="3">3$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Vix: el mes</span>
+                        <span class="precio" data-precio="1.5">1.5$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Plex:</span>
+                        <span class="precio" data-precio="2.9">2.9$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Paramount:</span>
+                        <span class="precio" data-precio="2">2$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Tele Latino:</span>
+                        <span class="precio" data-precio="3">3$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>ChatGPT:</span>
+                        <span class="precio" data-precio="4">4$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="check-app">
+                        <span>Capcut:</span>
+                        <span class="precio" data-precio="4">4$</span>
+                        <input type="number" class="contador" value="1" min="1">
+                        <span class="precio-convertido"></span>
+                    </li>
+                </ul>
+            </div>
 
-        <h2>Lista de Precios:</h2>
-        <ul id="lista-precios">
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Magis tv: 1 mes</span>
-                <span class="precio" data-precio="3">3$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Magis tv: 3 meses</span>
-                <span class="precio" data-precio="8">8$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Netflix: 1 mes compartido</span>
-                <span class="precio" data-precio="3.5">3.5$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Netflix: 1 perfil privado</span>
-                <span class="precio" data-precio="7">7$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Netflix: 2 perfiles privado</span>
-                <span class="precio" data-precio="11">11$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Netflix: completo</span>
-                <span class="precio" data-precio="13.5">13.5$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Spotify: 1 mes</span>
-                <span class="precio" data-precio="4.5">4.5$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Spotify: 3 meses</span>
-                <span class="precio" data-precio="13.5">13.5$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>HBO: el mes</span>
-                <span class="precio" data-precio="2">2$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Crunchy: el mes</span>
-                <span class="precio" data-precio="2.9">2.9$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Canva: el mes</span>
-                <span class="precio" data-precio="2.5">2.5$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>YouTube:</span>
-                <span class="precio" data-precio="5">5$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Amazon: el mes</span>
-                <span class="precio" data-precio="2">2$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Disney: el mes</span>
-                <span class="precio" data-precio="3">3$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Vix: el mes</span>
-                <span class="precio" data-precio="1.5">1.5$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Plex:</span>
-                <span class="precio" data-precio="2.5">2.5$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Paramount:</span>
-                <span class="precio" data-precio="2">2$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-            <li>
-                <input type="checkbox" class="check-app">
-                <span>Tele Latino:</span>
-                <span class="precio" data-precio="3">3$</span>
-                <input type="number" class="contador" value="1" min="1">
-                <span class="precio-convertido"></span>
-            </li>
-        </ul>
+            <div class="resumen">
+                <h3>Resumen de Compra</h3>
+                <div class="total">Total en dólares: <span id="total-usd">0.00$</span></div>
+                <div class="total">Total en BsS: <span id="total-bss">0.00 BsS</span></div>
+            </div>
+        </div>
     </div>
 
-    <div class="resumen">
-        <h3>Resumen de Compra</h3>
-        <div class="total">Total en dólares: <span id="total-usd">0.00$</span></div>
-        <div class="total">Total en BsS: <span id="total-bss">0.00 BsS</span></div>
-    </div>
-</div>
+    <script>
+        const dolarInput = document.getElementById('dolar');
+        
+        function actualizarPrecios() {
+            const dolar = parseFloat(dolarInput.value) || 0;
+            let totalUSD = 0;
+            let totalBsS = 0;
 
-<script>
-    const dolarInput = document.getElementById('dolar');
-    
-    function actualizarPrecios() {
-        const dolar = parseFloat(dolarInput.value) || 0;
-        let totalUSD = 0;
-        let totalBsS = 0;
+            document.querySelectorAll('.check-app').forEach(checkbox => {
+                const li = checkbox.parentElement;
+                const contador = li.querySelector('.contador');
+                const precioElement = li.querySelector('.precio');
+                const precioConvertidoElement = li.querySelector('.precio-convertido');
+                
+                if(checkbox.checked) {
+                    const precio = parseFloat(precioElement.dataset.precio);
+                    const cantidad = parseFloat(contador.value);
+                    const totalItem = precio * cantidad;
+                    
+                    // Actualizar conversión individual
+                    precioConvertidoElement.textContent = `(${(totalItem * dolar).toFixed(2)} BsS)`;
+                    
+                    // Sumar a totales
+                    totalUSD += totalItem;
+                } else {
+                    precioConvertidoElement.textContent = '';
+                }
+            });
 
+            totalBsS = totalUSD * dolar;
+            document.getElementById('total-usd').textContent = `${totalUSD.toFixed(2)}$`;
+            document.getElementById('total-bss').textContent = `${totalBsS.toFixed(2)} BsS`;
+        }
+
+        // Event listeners
+        dolarInput.addEventListener('input', actualizarPrecios);
+        
         document.querySelectorAll('.check-app').forEach(checkbox => {
-            const li = checkbox.parentElement;
-            const contador = li.querySelector('.contador');
-            const precioElement = li.querySelector('.precio');
-            const precioConvertidoElement = li.querySelector('.precio-convertido');
-            
-            if(checkbox.checked) {
-                const precio = parseFloat(precioElement.dataset.precio);
-                const cantidad = parseFloat(contador.value);
-                const totalItem = precio * cantidad;
-                
-                // Actualizar conversión individual
-                precioConvertidoElement.textContent = `(${(totalItem * dolar).toFixed(2)} BsS)`;
-                
-                // Sumar a totales
-                totalUSD += totalItem;
-            } else {
-                precioConvertidoElement.textContent = '';
-            }
+            checkbox.addEventListener('change', function() {
+                const contador = this.parentElement.querySelector('.contador');
+                contador.style.display = this.checked ? 'inline-block' : 'none';
+                actualizarPrecios();
+            });
         });
 
-        totalBsS = totalUSD * dolar;
-        document.getElementById('total-usd').textContent = `${totalUSD.toFixed(2)}$`;
-        document.getElementById('total-bss').textContent = `${totalBsS.toFixed(2)} BsS`;
-    }
-
-    // Event listeners
-    dolarInput.addEventListener('input', actualizarPrecios);
-    
-    document.querySelectorAll('.check-app').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const contador = this.parentElement.querySelector('.contador');
-            contador.style.display = this.checked ? 'inline-block' : 'none';
-            actualizarPrecios();
+        document.querySelectorAll('.contador').forEach(contador => {
+            contador.addEventListener('input', actualizarPrecios);
         });
-    });
-
-    document.querySelectorAll('.contador').forEach(contador => {
-        contador.addEventListener('input', actualizarPrecios);
-    });
-</script>
-
+    </script>
 </body>
 </html>

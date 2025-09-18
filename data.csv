@@ -1,42 +1,51 @@
-ervicio|email|clave|usuarios|fecha_vencimiento|notas|puestos_ocupados|puestos_totales
-Canva|canva0@ejemplo.com|x7f9t2b3|user0_0,user0_1|2025-05-24|Revisar detalles|4|10
-Magis|magis1@ejemplo.com|h3k9d4s8|user1_0|2025-05-27||2|10
-Netflix|netflix2@ejemplo.com|p9r5v1x2|user2_0,user2_1,user2_2|2025-05-29||7|10
-Canva|canva3@ejemplo.com|q4m2z7a1|user3_0|2025-05-30|Revisar detalles|1|10
-Magis|magis4@ejemplo.com|t2n8e6h5|user4_0,user4_1|2025-05-25||3|10
-Netflix|netflix5@ejemplo.com|b6c3s9k4|user5_0|2025-05-24||9|10
-Canva|canva6@ejemplo.com|v1a8d5f3|user6_0,user6_1,user6_2|2025-05-26||5|10
-Magis|magis7@ejemplo.com|z3x5c8r2|user7_0|2025-05-28|Revisar detalles|0|10
-Netflix|netflix8@ejemplo.com|l7p2h3u6|user8_0,user8_1|2025-05-30||8|10
-Canva|canva9@ejemplo.com|m5t4n2s7|user9_0|2025-05-27||2|10
-Magis|magis10@ejemplo.com|n8f1r6d2|user10_0,user10_1|2025-05-25||4|10
-Netflix|netflix11@ejemplo.com|o3k7s9p1|user11_0,user11_1,user11_2|2025-05-24||6|10
-Canva|canva12@ejemplo.com|p4z2b8d9|user12_0|2025-05-29||1|10
-Magis|magis13@ejemplo.com|r6n5t3f4|user13_0|2025-05-26|Revisar detalles|3|10
-Netflix|netflix14@ejemplo.com|s9v2k3n5|user14_0,user14_1|2025-05-28||7|10
-Canva|canva15@ejemplo.com|t1c8h5x7|user15_0|2025-05-30||0|10
-Magis|magis16@ejemplo.com|u2r3d6g8|user16_0,user16_1,user16_2|2025-05-25||5|10
-Netflix|netflix17@ejemplo.com|v5m7y2p3|user17_0|2025-05-24||4|10
-Canva|canva18@ejemplo.com|w3b6n8t1|user18_0|2025-05-27|Revisar detalles|6|10
-Magis|magis19@ejemplo.com|x9p2q4r6|user19_0,user19_1|2025-05-29||7|10
-Netflix|netflix20@ejemplo.com|y1n5d8c2|user20_0|2025-05-30||2|10
-Canva|canva21@ejemplo.com|z4t7k3n5|user21_0,user21_1|2025-05-24|Revisar detalles|9|10
-Magis|magis22@ejemplo.com|a3r6v2m8|user22_0|2025-05-26||1|10
-Netflix|netflix23@ejemplo.com|b8n5p3x2|user23_0,user23_1,user23_2|2025-05-28||8|10
-Canva|canva24@ejemplo.com|c2m9h5v7|user24_0|2025-05-25||0|10
-Magis|magis25@ejemplo.com|d5r1k8n3|user25_0,user25_1|2025-05-27||4|10
-Netflix|netflix26@ejemplo.com|e9t4m2c6|user26_0|2025-05-29|Revisar detalles|3|10
-Canva|canva27@ejemplo.com|f1r6d7b8|user27_0|2025-05-30||6|10
-Magis|magis28@ejemplo.com|g3n5x8p2|user28_0,user28_1|2025-05-24||2|10
-Netflix|netflix29@ejemplo.com|h6t9v1k3|user29_0,user29_1|2025-05-26|Revisar detalles|5|10
-Canva|canva30@ejemplo.com|i2m7d4r5|user30_0|2025-05-28||7|10
-Magis|magis31@ejemplo.com|j8c3n6t4|user31_0,user31_1,user31_2|2025-05-25||1|10
-Netflix|netflix32@ejemplo.com|k5p1r8y2|user32_0|2025-05-27||9|10
-Canva|canva33@ejemplo.com|l9v2d3n7|user33_0,user33_1|2025-05-29||0|10
-Magis|magis34@ejemplo.com|m4t6k8p3|user34_0|2025-05-30|Revisar detalles|3|10
-Netflix|netflix35@ejemplo.com|n1r5c2v6|user35_0,user35_1|2025-05-24||8|10
-Canva|canva36@ejemplo.com|o7m2d9t4|user36_0|2025-05-26||2|10
-Magis|magis37@ejemplo.com|p3n8y6r1|user37_0,user37_1|2025-05-28||5|10
-Netflix|netflix38@ejemplo.com|q6v1p4t9|user38_0|2025-05-25||4|10
-Canva|canva39@ejemplo.com|r2d7k3n5|user39_0,user39_1|2025-05-27|Revisar detalles|7|10
-Magis|magis40@ejemplo.com|s9m5t1x2|user40_0|2025-05-29||6|10
+servicio|email|clave|usuarios|fecha_vencimiento|notas|puestos_ocupados|puestos_totales
+Netflix|netflix.premium01@tutienda.com|n3tfl1xP@55|usuario1,usuario2|2025-09-18|Cuenta premium 4K|2|4
+MagisTV|magis.familiar02@tutienda.com|M@g1sTv2025|familia_gonzalez|2025-09-18|Paquete familiar|4|6
+Canva|canva.pro03@tutienda.com|C@nv4Pr0!|disenador_ana|2025-09-19|Cuenta Pro con assets premium|1|1
+Disney+|disney.family04@tutienda.com|D1sn3yF4m|familia_rodriguez|2025-09-19|Perfiles infantiles|3|7
+HBO Max|hbo.cinema05@tutienda.com|HB0M4xC1n3|cinema_lover|2025-09-19|Todo el catálogo premium|2|5
+Spotify|spotify.premium06@tutienda.com|Sp0t1fYPrem|music_lover23|2025-09-20|Calidad alta|1|1
+YouTube|youtube.premium07@tutienda.com|Y0uTub3Pr3m|video_creator|2025-09-20|Sin anuncios|1|6
+Amazon|amazon.prime08@tutienda.com|Am4z0nPr1m3|prime_user|2025-09-20|Incluye Prime Video|2|4
+Crunchyroll|crunchy.premium09@tutienda.com|Crunchy2025!|anime_fan|2025-09-21|Anime sin límites|1|1
+Paramount|paramount.plus10@tutienda.com|P4r4m0unt+|movie_buff|2025-09-21|Contenido exclusivo|3|5
+Tele Latino|teletl.premium11@tutienda.com|T3l3TL2025|familia_martinez|2025-09-21|Canales latinos|4|6
+Plex|plex.pass12@tutienda.com|Pl3xP@ss!|media_server|2025-09-22|Pass vitalicio|1|1
+Vix|vix.premium13@tutienda.com|V1xPr3m!|novela_fan|2025-09-22|Novelas completas|2|3
+ChatGPT|chatgpt.plus14@tutienda.com|Ch4tGPT+|tech_writer|2025-09-22|GPT-4 incluido|1|1
+Capcut|capcut.pro15@tutienda.com|C4pcutPr0|video_editor|2025-09-23|Efectos premium|1|1
+Netflix|netflix.estandar16@tutienda.com|N3tfl1xStd|usuario3,usuario4|2025-09-23|Calidad HD|2|4
+MagisTV|magis.basico17@tutienda.com|M@g1sB4s1c|usuario_solo|2025-09-23|Plan básico|1|1
+Canva|canva.edu18@tutienda.com|C@nv4Educ|profesor_edu|2025-09-24|Cuenta educativa|1|1
+Disney+|disney.plus19@tutienda.com|D1sn3yPlu5|kids_account|2025-09-24|Solo contenido infantil|2|4
+HBO Max|hbo.estandar20@tutienda.com|HB0Std2025|movie_watcher|2025-09-24|Calidad estándar|1|3
+Netflix|netflix.premium21@tutienda.com|N3tPrem25!|family_account|2025-09-25|4 dispositivos|4|4
+MagisTV|magis.premium22@tutienda.com|M@g1sPrem|premium_user|2025-09-25|Todos los canales|3|5
+Canva|canva.team23@tutienda.com|C@nv4T3am|design_team|2025-09-25|Equipo de diseño|5|10
+Spotify|spotify.family24@tutienda.com|Sp0t1F4m|family_music|2025-09-18|Plan familiar|5|6
+YouTube|youtube.family25@tutienda.com|Y0uTub3F4m|family_account|2025-09-19|Familiar compartido|4|6
+Amazon|amazon.family26@tutienda.com|Am4z0nF4m|family_shopping|2025-09-20|Prime familiar|4|6
+Crunchyroll|crunchy.mega27@tutienda.com|CrunchyM3g4|mega_fan|2025-09-21|Mega fan account|1|1
+Paramount|paramount.family28@tutienda.com|P4r4m0untF4m|family_movies|2025-09-22|Plan familiar|4|6
+Tele Latino|teletl.gold29@tutienda.com|T3l3TLG0ld|gold_user|2025-09-23|Gold package|2|4
+Plex|plex.share30@tutienda.com|Pl3xSh4r3|shared_server|2025-09-24|Servidor compartido|3|5
+Netflix|netflix.share31@tutienda.com|N3tSh4r3|shared_account|2025-09-18|Cuenta compartida|2|4
+MagisTV|magis.share32@tutienda.com|M@g1sSh4r3|shared_tv|2025-09-19|TV compartida|3|5
+Canva|canva.share33@tutienda.com|C@nv4Sh4r3|shared_design|2025-09-20|Diseño compartido|2|4
+Disney+|disney.share34@tutienda.com|D1sn3ySh4r3|shared_kids|2025-09-21|Compartido niños|3|5
+HBO Max|hbo.share35@tutienda.com|HB0Sh4r3|shared_movies|2025-09-22|Películas compartidas|2|4
+Spotify|spotify.duo36@tutienda.com|Sp0t1Du0|couple_account|2025-09-23|Plan duo|2|2
+YouTube|youtube.student37@tutienda.com|Y0uTub3Std|student_user|2025-09-24|Cuenta estudiante|1|1
+Amazon|amazon.student38@tutienda.com|Am4z0nStd|student_prime|2025-09-25|Prime estudiantes|1|1
+Crunchyroll|crunchy.fan39@tutienda.com|CrunchyF4n|anime_lover|2025-09-18|Fan account|1|1
+Paramount|paramount.student40@tutienda.com|P4r4m0untStd|student_movies|2025-09-19|Estudiante|1|1
+Tele Latino|teletl.basico41@tutienda.com|T3l3TLB4s|basic_user|2025-09-20|Plan básico|1|2
+Plex|plex.student42@tutienda.com|Pl3xStd|student_media|2025-09-21|Estudiante|1|1
+Vix|vix.basico43@tutienda.com|V1xB4s1c|basic_streaming|2025-09-22|Plan básico|1|1
+ChatGPT|chatgpt.team44@tutienda.com|Ch4tGPTT3am|team_ai|2025-09-23|Equipo AI|3|5
+Capcut|capcut.basico45@tutienda.com|C4pcutB4s|basic_editor|2025-09-24|Editor básico|1|1
+Netflix|netflix.student46@tutienda.com|N3tStd2025|student_stream|2025-09-25|Estudiante|1|1
+MagisTV|magis.student47@tutienda.com|M@g1sStd|student_tv|2025-09-18|TV estudiante|1|1
+Canva|canva.student48@tutienda.com|C@nv4Std|student_design|2025-09-19|Estudiante diseño|1|1
+Disney+|disney.student49@tutienda.com|D1sn3yStd|student_kids|2025-09-20|Estudiante|1|1
+HBO Max|hbo.student50@tutienda.com|HB0Std2025|student_movies|2025-09-21|Estudiante cine|1|1
